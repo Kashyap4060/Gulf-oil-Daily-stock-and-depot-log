@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Log Entry Form</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            text-align: center;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        label.required::after {
+            content: " *";
+            color: red;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        input.error, select.error {
+            border: 2px solid red;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h3>Daily Log Entry Form</h3>
+    <form id="logForm" onsubmit="return handleFormSubmit(event)">
+        <label class="required">Serial No:</label>
+        <input type="text" id="serialNo" name="serialNo" readonly />
+
+        <label class="required">Opening Date:</label>
+        <input type="date" id="openingDate" name="openingDate" required onchange="populateWeekAndMonth()" />
+
+        <label class="required">Week:</label>
+        <input type="text" id="week" name="week" readonly />
+
+        <label class="required">Month:</label>
+        <input type="text" id="month" name="month" readonly />
+
+        <label class="required">Depot Name:</label>
+        <select id="depotName" name="depotName" required>
+            <option value="">Select a Depot</option>
+            <option value="Bandra">Bandra</option>
+            <option value="Santacruz">Santacruz</option>
+      <option value="Andheri">Andheri</option>
+      <option value="Jogeshwari">Jogeshwari</option>
+      <option value="Goregaon">Goregaon</option>
+      <option value="Malad">Malad</option>
+      <option value="Kandivali">Kandivali</option>
+      <option value="Borivali">Borivali</option>
+      <option value="Dahisar">Dahisar</option>
+      <option value="Sion">Sion</option>
+      <option value="Chembur">Chembur</option>
+      <option value="Kurla">Kurla</option>
+      <option value="Ghatkopar">Ghatkopar</option>
+      <option value="Vidyavihar">Vidyavihar</option>
+      <option value="Vikhroli">Vikhroli</option>
+      <option value="Bhandup">Bhandup</option>
+      <option value="Mulund">Mulund</option>
+      <option value="Powai">Powai</option>
+      <option value="Kanjurmarg">Kanjurmarg</option>
+      <option value="Thane">Thane</option>
+      <option value="Dadar">Dadar</option>
+      <option value="Wadala">Wadala</option>
+      <option value="Parel">Parel</option>
+      <option value="Lower Parel">Lower Parel</option>
+      <option value="Sewri">Sewri</option>
+      <option value="Byculla">Byculla</option>
+        </select>
+
+        <label class="required">Vehicle No:</label>
+        <select id="vehicleNo" name="vehicleNo" required>
+      <option value="">Select a Vehicle</option>
+      <option value="MH03 EF 9101">MH03 EF 9101</option>
+      <option value="MH04 GH 2345">MH04 GH 2345</option>
+      <option value="MH05 IJ 6789">MH05 IJ 6789</option>
+      <option value="MH06 KL 1122">MH06 KL 1122</option>
+      <option value="MH07 MN 3344">MH07 MN 3344</option>
+      <option value="MH08 OP 5566">MH08 OP 5566</option>
+      <option value="MH09 QR 7788">MH09 QR 7788</option>
+      <option value="MH10 ST 9900">MH10 ST 9900</option>
+      <option value="MH12 UV 1235">MH12 UV 1235</option>
+      <option value="MH14 WX 5676">MH14 WX 5676</option>
+      <option value="MH15 YZ 9102">MH15 YZ 9102</option>
+      <option value="MH17 AA 4567">MH17 AA 4567</option>
+      <option value="MH20 BB 7890">MH20 BB 7890</option>
+        </select>
+
+    <label class="required">Vehicle Reporting Time:</label>
+    <input type="time" name="reportingTime" required />
+    
+   <label class="required">Opening KM Reading:</label>
+    <input type="number" name="OpeningKMreading" required />
+
+        <label>ADBLUE / DEF Filled:</label>
+        <select id="adblueDef" name="adblueDef" onchange="toggleQuantityField('defLitresFilledQty', this)">
+            <option value="No" selected>No</option>
+            <option value="Yes">Yes</option>
+        </select>
+
+        <label>DEF Litres Filled Qty (L):</label>
+        <input type="number" id="defLitresFilledQty" name="defLitresFilledQty" disabled />
+
+        <label>ENGINE OIL Filled:</label>
+        <select id="engineOil" name="engineOil" onchange="toggleQuantityField('engineOilQty', this)">
+            <option value="No" selected>No</option>
+            <option value="Yes">Yes</option>
+        </select>
+
+        <label>ENGINE OIL Filled Qty (L):</label>
+        <input type="number" id="engineOilQty" name="engineOilQty" disabled />
+
+        <label>COOLANT Filled:</label>
+        <select id="coolant" name="coolant" onchange="toggleQuantityField('coolantQty', this)">
+            <option value="No" selected>No</option>
+            <option value="Yes">Yes</option>
+        </select>
+
+        <label>COOLANT Filled Qty (L):</label>
+        <input type="number" id="coolantQty" name="coolantQty" disabled />
+
+<label class="required">Closing Date:</label>
+    <input type="date" name="closingDate" required />
+
+    <label>Closing KM Reading:</label>
+    <input type="number" name="closingKMReading" readonly />
+
+    <label>No of KMs Ran:</label>
+    <input type="number" name="kmsRan" readonly />
+
+    <label class="required">Photograph of Refill Qty (Y/N):</label>
+    <select id="refillPhoto" name="refillPhoto" required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+    </select>
+
+    <label class="required">Driver / Depot Staff Name:</label>
+    <input type="text" name="driverName" required />
+
+    <label class="required">Driver / Depot Staff Signature (Y/N):</label>
+    <select id="driverssignature" name="driverssignature" required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+    </select>
+
+    <label class="required">Gulf Operator / Staff Signature (Y/N):</label>
+    <select id="Gulfsignature" name="Gulfsignature" required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function populateWeekAndMonth() {
+            const dateField = document.getElementById('openingDate').value;
+            if (dateField) {
+                const date = new Date(dateField);
+                document.getElementById('week').value = `Week ${Math.ceil(date.getDate() / 7)}`;
+                document.getElementById('month').value = date.toLocaleString('default', { month: 'long' });
+            }
+        }
+
+        function toggleQuantityField(fieldId, selectElement) {
+            const field = document.getElementById(fieldId);
+            field.disabled = selectElement.value !== "Yes";
+            if (field.disabled) {
+                field.value = "";
+            }
+        }
+
+            function handleFormSubmit(event) {
+        event.preventDefault();
+        const form = document.getElementById('logForm');
+        let isValid = true;
+
+        // Clear existing error styles
+        form.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
+
+        // Check all required fields
+        const requiredFields = form.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('error');
+                isValid = false;
+            }
+        });
+
+        // Check conditional fields (Material types with quantities)
+        const materialFields = [
+            { type: "adblueDef", qty: "defLitresFilledQty" },
+            { type: "engineOil", qty: "engineOilQty" },
+            { type: "coolant", qty: "coolantQty" }
+        ];
+
+        materialFields.forEach(({ type, qty }) => {
+            const typeField = form.querySelector(`[name="${type}"]`);
+            const qtyField = form.querySelector(`[name="${qty}"]`);
+            if (typeField.value === "Yes" && !qtyField.value.trim()) {
+                qtyField.classList.add('error');
+                isValid = false;
+            }
+        });
+
+        if (!isValid) {
+            alert('Please fill all required fields, including quantities for selected materials.');
+            return false;
+        }
+
+            const formData = new FormData(form);
+            google.script.run
+                .withSuccessHandler(() => {
+                    alert('Form submitted successfully!');
+                    form.reset();
+                    fetchSerialNo();
+                })
+                .addEntry(Object.fromEntries(formData));
+            return false;
+        }
+
+        function fetchSerialNo() {
+            google.script.run.withSuccessHandler(serialNo => {
+                document.getElementById('serialNo').value = serialNo;
+            }).getNextSerialNo();
+        }
+
+        window.onload = fetchSerialNo;
+    </script>
+</body>
+</html>
