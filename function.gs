@@ -1,5 +1,5 @@
 function doGet() {
-  return HtmlService.createHtmlOutputFromFile('index.html')
+  return HtmlService.createHtmlOutputFromFile('index1.html')
     .setTitle('Daily Stock Entry');
 }
 
