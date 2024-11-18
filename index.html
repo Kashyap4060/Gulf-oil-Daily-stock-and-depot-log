@@ -173,14 +173,14 @@
         <label>COOLANT Filled Qty (L):</label>
         <input type="number" id="coolantQty" name="coolantQty" disabled />
 
-<label class="required">Closing Date:</label>
-    <input type="date" name="closingDate" required />
+        <label class="required">Closing Date:</label>
+        <input type="date" name="closingDate" required />
 
-    <label>Closing KM Reading:</label>
-    <input type="number" name="closingKMReading" readonly />
+        <label>Closing KM Reading:</label>
+        <input type="number" name="closingKMReading" readonly />
 
-    <label>No of KMs Ran:</label>
-    <input type="number" name="kmsRan" readonly />
+        <label>No of KMs Ran:</label>
+        <input type="number" name="kmsRan" readonly />
 
     <label class="required">Photograph of Refill Qty (Y/N):</label>
     <select id="refillPhoto" name="refillPhoto" required>
@@ -228,10 +228,20 @@
             }
         }
 
-            function handleFormSubmit(event) {
-        event.preventDefault();
-        const form = document.getElementById('logForm');
-        let isValid = true;
+         var isSubmitting = false;
+
+function handleFormSubmit(event) {
+  event.preventDefault();
+  const form = document.getElementById('logForm');
+  
+  // Check if the form is already being submitted
+  if (isSubmitting) {
+    alert('Form is already submitting. Please wait.');
+    return false;
+  }
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  let isValid = true;
 
         // Clear existing error styles
         form.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
@@ -265,7 +275,10 @@
             alert('Please fill all required fields, including quantities for selected materials.');
             return false;
         }
+          isSubmitting = true;
+               submitButton.disabled = true;
 
+               
             const formData = new FormData(form);
             google.script.run
                 .withSuccessHandler(() => {
@@ -274,6 +287,11 @@
                     fetchSerialNo();
                 })
                 .addEntry(Object.fromEntries(formData));
+             finally {
+    // Always reset the flag and button state, regardless of success or failure
+    isSubmitting = false;
+    submitButton.disabled = false;
+  }
             return false;
         }
 
@@ -282,6 +300,11 @@
                 document.getElementById('serialNo').value = serialNo;
             }).getNextSerialNo();
         }
+
+        window.onload = fetchSerialNo;
+    </script>
+</body>
+</html>
 
         window.onload = fetchSerialNo;
     </script>
